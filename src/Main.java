@@ -20,6 +20,14 @@ public class Main {
                 case 3:
                     getBalance(dArray);
                     break;
+                case 4:
+                    getHistory(dArray);
+                    break;
+                case 5:
+                    getHistoryByCategory(dArray, scr);
+                    break;
+                case 0:
+                    break;
             }
         }
             while (choice != 0);
@@ -39,9 +47,13 @@ public class Main {
         String input = scr.nextLine();
         String[] words = input.split(" ");
         if (words.length==2){
-            list.add(new String[]{words[0], words[1]});
-            System.out.println("✅ Добавлено: " + words[0] +" с суммой " + words[1]);
-            return list;
+            if(getBalance(list)+Integer.parseInt(words[1])>=0) {
+                list.add(new String[]{words[0], words[1]});
+                System.out.println("✅ Добавлено: " + words[0] + " с суммой " + words[1]);
+                return list;
+            }
+            else System.out.println("Вы не можете потратить больше, чем есть на балансе");
+            return (create(list, scr));
         }
         else {
             System.out.println("Введена некорректная строка");
@@ -58,7 +70,7 @@ public class Main {
         scr.nextLine();
         if (index>=0 && index<=list.size()){
             String[] deleteRow = list.remove(index);
-            System.out.println("Удалено:"+deleteRow[0]+ " с суммой "+ deleteRow[1]);
+            System.out.println("✅ Удалено:"+deleteRow[0]+ " с суммой "+ deleteRow[1]);
         }
         else {
             System.out.println("Не найдена запись с таким номером");
@@ -76,8 +88,35 @@ public class Main {
             int element = Integer.parseInt(row[1]);
             sum = sum+element;
         }
-        System.out.println("Ваш баланс: " + sum);
+        System.out.println("✅ Ваш баланс: " + sum);
         return sum;
-
+    }
+    public static void getHistory(List<String[]> list) {
+        if (list.isEmpty()) {
+            System.out.println("Нет записей о тратах и пополнениях");
+            return;
+        }
+        System.out.println("✅ История ваших трат и пополнений:");
+        for(int i=0; i<list.size(); i++){
+            String[] row = list.get(i);
+            System.out.printf("| %-3d | %-10s | %7s |%n", i + 1, row[0], row[1]);
+        }
+    }
+    public static void getHistoryByCategory(List<String[]> list, Scanner scr) {
+        if (list.isEmpty()) {
+            System.out.println("Нет записей о тратах и пополнениях");
+            return;
+        }
+        System.out.println("Введите категорию:");
+        String category = scr.nextLine();
+        System.out.println("✅ История ваших трат и пополнений с типом "+ category +":");
+        int a=0;
+        for(int i=0; i<list.size(); i++){
+            String[] row = list.get(i);
+            if(row[0].equalsIgnoreCase(category)){
+                a++;
+            System.out.printf("| %-3d | %-10s | %7s |%n", i + 1, row[0], row[1]);}
+        }
+        if (a==0) System.out.println("Нет записей для данной категории");
     }
 }
