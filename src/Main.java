@@ -14,6 +14,12 @@ public class Main {
                 case 1:
                     dArray = create(dArray, scr);
                     break;
+                case 2:
+                    delete(dArray, scr);
+                    break;
+                case 3:
+                    getBalance(dArray);
+                    break;
             }
         }
             while (choice != 0);
@@ -34,12 +40,44 @@ public class Main {
         String[] words = input.split(" ");
         if (words.length==2){
             list.add(new String[]{words[0], words[1]});
-            System.out.println("✅ Добавлено: " + words[0] + words[1]);
+            System.out.println("✅ Добавлено: " + words[0] +" с суммой " + words[1]);
             return list;
         }
         else {
             System.out.println("Введена некорректная строка");
             return (create(list, scr));
         }
+    }
+    public static void delete(List<String[]> list, Scanner scr){
+        if (list.isEmpty()){
+            System.out.println("Список пустой, нет записей на удаление");
+            return;
+        }
+        System.out.println("Вы выбрали удаление траты/пополнения" + "\n" + "Введите номер записи");
+        int index = scr.nextInt()-1;
+        scr.nextLine();
+        if (index>=0 && index<=list.size()){
+            String[] deleteRow = list.remove(index);
+            System.out.println("Удалено:"+deleteRow[0]+ " с суммой "+ deleteRow[1]);
+        }
+        else {
+            System.out.println("Не найдена запись с таким номером");
+            System.out.println("Доступны номера: 1-"+list.size());
+        }
+    }
+    public static int getBalance(List<String[]> list) {
+        if (list.isEmpty()) {
+            System.out.println("Нет записи о тратах. Баланс = 0");
+            return 0;
+        }
+        int sum = 0;
+        for(int i=0; i<list.size(); i++){
+            String[] row = list.get(i);
+            int element = Integer.parseInt(row[1]);
+            sum = sum+element;
+        }
+        System.out.println("Ваш баланс: " + sum);
+        return sum;
+
     }
 }
